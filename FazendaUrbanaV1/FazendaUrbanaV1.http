@@ -1,0 +1,6 @@
+@FazendaUrbanaV1_HostAddress = http://localhost:5266
+
+GET {{FazendaUrbanaV1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
