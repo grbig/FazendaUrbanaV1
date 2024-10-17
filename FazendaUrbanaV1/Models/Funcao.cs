@@ -6,6 +6,6 @@
         public required string Nome { get; set; }
 
         // Relacionamento: Uma Função pode ter vários Usuários
-        public required ICollection<Usuario> Usuarios { get; set; }
+        public ICollection<Usuario>? Usuarios { get; set; }
     }
 }

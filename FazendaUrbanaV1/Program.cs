@@ -1,15 +1,31 @@
+using FazendaUrbanaV1.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adiciona a connection string a partir do appsettings.json
+#pragma warning disable CS8600 // Conversão de literal nula ou possível valor nulo em tipo não anulável.
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+#pragma warning restore CS8600 // Conversão de literal nula ou possível valor nulo em tipo não anulável.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Registra o ApplicationDbContext no contêiner de serviços
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Add services to the container.
+builder.Services.AddControllers()
+     .AddJsonOptions(options =>
+     {
+         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+     }); 
+
+// Swagger (para documentação da API)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure o pipeline de requisições HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -10,8 +10,8 @@ namespace FazendaUrbanaV1.Models
         public required string Senha { get; set; }
 
         // Relacionamento: Um Usuário pode ter uma Função
-        public int FuncaoId { get; set; } // Chave estrangeira
-        public required Funcao Funcao { get; set; }
+        public int? FuncaoId { get; set; } // Chave estrangeira
+        public Funcao? Funcao { get; set; }
     }
 
 }
