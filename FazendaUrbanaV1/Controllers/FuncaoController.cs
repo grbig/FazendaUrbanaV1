@@ -30,4 +30,61 @@ public class FuncaoController : ControllerBase
 
         return CreatedAtAction(nameof(GetFuncao), new { id = funcao.Id }, funcao);
     }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Funcao>> GetFuncaoById(int id)
+    {
+        var funcao = await _context.Funcoes
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (funcao == null)
+        {
+            return NotFound(); // Retorna 404 se o usuário não for encontrado
+        }
+
+        return funcao; // Retorna o usuário com sucesso
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateFuncao(int id, Funcao funcaoAtualizada)
+    {
+        if (id != funcaoAtualizada.Id)
+        {
+            return BadRequest("ID da URL e ID da Função não correspondem.");
+        }
+
+        var funcaoExistente = await _context.Usuarios.FindAsync(id);
+        if (funcaoExistente == null)
+        {
+            return NotFound("Função não encontrada.");
+        }
+
+        // Atualiza os campos do usuário
+        funcaoExistente.Nome = funcaoAtualizada.Nome;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!FuncaoExists(id))
+            {
+                return NotFound("Usuário não existe.");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent(); // Retorna 204 quando a atualização é bem-sucedida
+    }
+
+    
+
+     private bool FuncaoExists(int id)
+    {
+        return _context.Funcoes.Any(e => e.Id == id);
+    }
+
 }
