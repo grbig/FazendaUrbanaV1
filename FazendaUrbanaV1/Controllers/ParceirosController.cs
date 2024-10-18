@@ -24,7 +24,7 @@ public class ParceirosController : ControllerBase
 
     // POST: api/Categorias
     [HttpPost]
-    public async Task<ActionResult<Parceiros>> PostCategoria(Parceiros parceiros)
+    public async Task<ActionResult<Parceiros>> PostParceiro(Parceiros parceiros)
     {
         _context.Parceiros.Add(parceiros);
         await _context.SaveChangesAsync();

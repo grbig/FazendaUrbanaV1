@@ -24,7 +24,7 @@ public class ProdutosController : ControllerBase
 
     // POST: api/Produtos
     [HttpPost]
-    public async Task<ActionResult<Produtos>> PostCategoria(Produtos produto)
+    public async Task<ActionResult<Produtos>> PostProduto(Produtos produto)
     {
         _context.Produtos.Add(produto);
         await _context.SaveChangesAsync();
