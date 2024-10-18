@@ -99,6 +99,22 @@ public class UsuariosController : ControllerBase
         return NoContent(); // Retorna 204 quando a atualização é bem-sucedida
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteLine(int id)
+    {
+        var lineDelete = await _context.Usuarios.FindAsync(id);
+        if (lineDelete == null)
+        {
+            return NotFound("Usuário não encontrado.");
+        }
+
+        _context.Usuarios.Remove(lineDelete);
+        await _context.SaveChangesAsync();
+
+        return NoContent(); // Retorna 204 No Content para indicar que a exclusão foi bem-sucedida
+    }
+
+
     private bool UsuarioExists(int id)
     {
         return _context.Usuarios.Any(e => e.Id == id);

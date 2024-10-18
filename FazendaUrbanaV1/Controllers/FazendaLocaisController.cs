@@ -80,6 +80,20 @@ public class FazendaLocaisController : ControllerBase
         return NoContent(); // Retorna 204 quando a atualização é bem-sucedida
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteLine(int id)
+    {
+        var lineDelete = await _context.FazendaLocais.FindAsync(id);
+        if (lineDelete == null)
+        {
+            return NotFound("Objeto não encontrado.");
+        }
+
+        _context.FazendaLocais.Remove(lineDelete);
+        await _context.SaveChangesAsync();
+
+        return NoContent(); // Retorna 204 No Content para indicar que a exclusão foi bem-sucedida
+    }
 
 
      private bool FazendaLocalExists(int id)

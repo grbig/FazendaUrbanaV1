@@ -79,7 +79,20 @@ public class FuncaoController : ControllerBase
 
         return NoContent(); // Retorna 204 quando a atualização é bem-sucedida
     }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteLine(int id)
+    {
+        var lineDelete = await _context.Funcoes.FindAsync(id);
+        if (lineDelete == null)
+        {
+            return NotFound("Objeto não encontrado.");
+        }
 
+        _context.Funcoes.Remove(lineDelete);
+        await _context.SaveChangesAsync();
+
+        return NoContent(); // Retorna 204 No Content para indicar que a exclusão foi bem-sucedida
+    }
     
 
      private bool FuncaoExists(int id)
