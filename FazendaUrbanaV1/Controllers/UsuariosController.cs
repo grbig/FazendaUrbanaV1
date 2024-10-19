@@ -29,6 +29,7 @@ public class UsuariosController : ControllerBase
                Email = u.Email,
                FuncaoId = u.FuncaoId,
                NomeFuncao = u.Funcao.Nome
+         
            })
            .ToListAsync();
 #pragma warning restore CS8602 // Desrefer�ncia de uma refer�ncia possivelmente nula.

@@ -91,7 +91,7 @@ public class FazendaController : ControllerBase
             return NotFound("Objeto não encontrado.");
         }
 
-        _context.FazendaLocais.Remove(lineDelete);
+        _context.Fazendas.Remove(lineDelete);
         await _context.SaveChangesAsync();
 
         return NoContent(); // Retorna 204 No Content para indicar que a exclusão foi bem-sucedida

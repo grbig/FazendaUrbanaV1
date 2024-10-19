@@ -1,4 +1,5 @@
 using FazendaUrbanaV1.Data;
+using FazendaUrbanaV1.Dto;
 using FazendaUrbanaV1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +18,25 @@ public class ProdutosController : ControllerBase
 
     // GET: api/Produtos
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Produtos>>> GetProdutos()
+    public async Task<ActionResult<IEnumerable<ProdutoDto>>> GetProdutos()
     {
-        return await _context.Produtos.ToListAsync();
+        return await _context.Produtos
+            .Include(u => u.Categoria)
+            .Select(static u => new ProdutoDto
+            {
+                Id = u.Id,
+                Nome = u.Nome,
+                Estoque = u.Estoque,
+                ProducaoEmSegundos = u.ProducaoEmSegundos,
+                ValidadeEmSegundos = u.ValidadeEmSegundos,
+                Producao = u.Producao,
+                Venda = u.Venda,
+                CategoriaId = u.CategoriaId,
+                NomeCategoria = u.Categoria.Categoria,
+                VlrCusto = u.VlrCusto,
+                VlrVenda = u.VlrVenda
+            })
+            .ToListAsync();
     }
 
     // POST: api/Produtos
@@ -33,11 +50,26 @@ public class ProdutosController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Produtos>> GetProdutosById(int id)
+    public async Task<ActionResult<ProdutoDto>> GetProdutosById(int id)
     {
         var produto = await _context.Produtos
+            .Include(u => u.Categoria)
+            .Select(static u => new ProdutoDto
+            {
+                Id = u.Id,
+                Nome = u.Nome,
+                Estoque = u.Estoque,
+                ProducaoEmSegundos = u.ProducaoEmSegundos,
+                ValidadeEmSegundos = u.ValidadeEmSegundos,
+                Producao = u.Producao,
+                Venda = u.Venda,
+                CategoriaId = u.CategoriaId,
+                NomeCategoria = u.Categoria.Categoria,
+                VlrCusto = u.VlrCusto,
+                VlrVenda = u.VlrVenda
+            })
             .FirstOrDefaultAsync(u => u.Id == id);
-
+        
         if (produto == null)
         {
             return NotFound(); // Retorna 404
@@ -63,7 +95,6 @@ public class ProdutosController : ControllerBase
         produtoExistente.ProducaoEmSegundos = produtoAtualizado.ProducaoEmSegundos;
         produtoExistente.ValidadeEmSegundos = produtoAtualizado.ValidadeEmSegundos;
         produtoExistente.Estoque = produtoAtualizado.Estoque;
-        produtoExistente.Preco = produtoAtualizado.Preco;
         produtoExistente.VlrVenda = produtoAtualizado.VlrVenda;
         produtoExistente.VlrCusto = produtoAtualizado.VlrCusto;
         produtoExistente.Producao = produtoAtualizado.Producao;

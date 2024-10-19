@@ -3,7 +3,7 @@
     public class VendasIte
     {
        
-        public required Vendas Vendas { get; set; }
+        public Vendas? Vendas { get; set; }
         public int VendaId { get; set; }
 
         public int Id { get; set; }

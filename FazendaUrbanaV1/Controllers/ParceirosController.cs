@@ -29,7 +29,7 @@ public class ParceirosController : ControllerBase
         _context.Parceiros.Add(parceiros);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetParceiros), new { id = parceiros.Id }, parceiro);
+        return CreatedAtAction(nameof(GetParceiros), new { id = parceiros.Id }, parceiros);
     }
     
     [HttpGet("{id}")]

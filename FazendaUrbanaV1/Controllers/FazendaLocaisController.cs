@@ -33,7 +33,7 @@ public class FazendaLocaisController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Fazenda>> GetFazendaLocalById(int id)
+    public async Task<ActionResult<FazendaLocais>> GetFazendaLocalById(int id)
     {
         var fazendaLocal = await _context.FazendaLocais
             .FirstOrDefaultAsync(u => u.Id == id);

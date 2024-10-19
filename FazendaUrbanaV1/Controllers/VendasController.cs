@@ -1,67 +1,71 @@
-using FazendaUrbanaV1.Data;
+﻿using FazendaUrbanaV1.Data;
 using FazendaUrbanaV1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoriaController : ControllerBase
+public class VendasController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-
-    public CategoriaController(ApplicationDbContext context)
+    public VendasController(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    // GET: api/Categorias
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Categorias>>> GetCategorias()
+    public async Task<ActionResult<IEnumerable<Vendas>>> GetVendas()
     {
-        return await _context.Categorias
-            .Include(u => u.Produtos)
+        return await _context.Vendas
+            .Include(u => u.vendasIte)
             .ToListAsync();
     }
 
-    // POST: api/Categorias
+    // POST: api/Vendas
     [HttpPost]
-    public async Task<ActionResult<Categorias>> PostCategoria(Categorias categoria)
+    public async Task<ActionResult<Vendas>> PostVenda(Vendas venda)
     {
-        _context.Categorias.Add(categoria);
+        _context.Vendas.Add(venda);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetCategorias), new { id = categoria.Id }, categoria);
+        return CreatedAtAction(nameof(GetVendas), new { id = venda.Id }, venda);
     }
-    
+
     [HttpGet("{id}")]
-    public async Task<ActionResult<Categorias>> GetCategoriaById(int id)
+    public async Task<ActionResult<Vendas>> GetVendaById(int id)
     {
-        var categoria = await _context.Categorias
+        var venda = await _context.Vendas
+            .Include(v => v.vendasIte)
             .FirstOrDefaultAsync(u => u.Id == id);
 
-        if (categoria == null)
+        if (venda == null)
         {
             return NotFound(); // Retorna 404 se o usuário não for encontrado
         }
 
-        return categoria; // Retorna o usuário com sucesso
+        return venda; // Retorna o usuário com sucesso
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCategoria(int id, Categorias categoriaAtualizada)
+    public async Task<IActionResult> UpdateVenda(int id, Vendas vendaAtualizada)
     {
-        if (id != categoriaAtualizada.Id)
+        if (id != vendaAtualizada.Id)
         {
             return BadRequest("ID da URL e ID da Categoria não correspondem.");
         }
 
-        var categoriaExistente = await _context.Categorias.FindAsync(id);
-        if (categoriaExistente == null)
+        var vendaExistente = await _context.Vendas.FindAsync(id);
+        if (vendaExistente == null)
         {
             return NotFound("Categoria não encontrada.");
         }
 
-        categoriaExistente.Categoria = categoriaAtualizada.Categoria;
+        vendaExistente.DataFaturamento = vendaAtualizada.DataFaturamento;
+        vendaExistente.IdParceiro = vendaAtualizada.IdParceiro;
+        vendaExistente.IdUsuario = vendaAtualizada.IdUsuario;
+
 
         try
         {
@@ -69,7 +73,7 @@ public class CategoriaController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!CategoriaExists(id))
+            if (!VendasExists(id))
             {
                 return NotFound("Usuário não existe.");
             }
@@ -85,22 +89,21 @@ public class CategoriaController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLine(int id)
     {
-        var lineDelete = await _context.Categorias.FindAsync(id);
+        var lineDelete = await _context.Vendas.FindAsync(id);
         if (lineDelete == null)
         {
             return NotFound("Objeto não encontrado.");
         }
 
-        _context.Categorias.Remove(lineDelete);
+        _context.Vendas.Remove(lineDelete);
         await _context.SaveChangesAsync();
 
         return NoContent(); // Retorna 204 No Content para indicar que a exclusão foi bem-sucedida
     }
 
-     private bool CategoriaExists(int id)
+    private bool VendasExists(int id)
     {
-        return _context.Categorias.Any(e => e.Id == id);
+        return _context.Vendas.Any(e => e.Id == id);
     }
-
 
 }
