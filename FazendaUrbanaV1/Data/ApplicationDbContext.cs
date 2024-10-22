@@ -18,9 +18,6 @@ namespace FazendaUrbanaV1.Data
 
         public DbSet<Parceiros> Parceiros { get; set; }
 
-        public DbSet<Fazenda> Fazendas { get; set; }
-        public DbSet<FazendaLocais> FazendaLocais { get; set; }
-        
         public DbSet<Vendas> Vendas { get; set; }
         public DbSet<VendasIte> VendasIte { get; set; }
         
@@ -44,6 +41,35 @@ namespace FazendaUrbanaV1.Data
                 .HasOne(v => v.Vendas)
                 .WithMany(i => i.vendasIte)
                 .HasForeignKey(f => f.VendaId);
+
+            modelBuilder.Entity<VendasIte>()
+                .HasOne(v => v.Produto)
+                .WithMany()
+                .HasForeignKey(f => f.IdProduto);
+
+            modelBuilder.Entity<Vendas>()
+                .HasOne(u => u.Usuario)
+                .WithMany()
+                .HasForeignKey(u => u.IdUsuario);
+
+            modelBuilder.Entity<Vendas>()
+                .HasOne(u => u.Parceiro)
+                .WithMany()
+                .HasForeignKey(u => u.IdParceiro);
+
+            modelBuilder.Entity<Producao>()
+                .HasOne(u => u.Produto)
+                .WithMany()
+                .HasForeignKey(u => u.IdProduto)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producao>()
+               .HasOne(u => u.Semente)
+               .WithMany()
+               .HasForeignKey(u => u.IdSemente)
+               .OnDelete(DeleteBehavior.Restrict); 
+
+
 
 
             base.OnModelCreating(modelBuilder);

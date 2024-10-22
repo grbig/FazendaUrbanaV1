@@ -1,0 +1,39 @@
+﻿@page
+@model FazendaUrbanaV1.Pages.Parceiro.EditModel
+
+<h4>Parceiros</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Parceiros.Id" />
+            <div class="form-group">
+                <label asp-for="Parceiros.Nome" class="control-label"></label>
+                <input asp-for="Parceiros.Nome" class="form-control" />
+                <span asp-validation-for="Parceiros.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Parceiros.Cliente" /> @Html.DisplayNameFor(model => model.Parceiros.Cliente)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Parceiros.Fornecedor" /> @Html.DisplayNameFor(model => model.Parceiros.Fornecedor)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

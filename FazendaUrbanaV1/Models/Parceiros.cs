@@ -5,8 +5,8 @@
         public int Id { get; set; }
         public required string Nome { get; set; }
 
-        public required Boolean Cliente { get; set; }
-        public required Boolean Fornecedor { get; set; }
+        public required bool Cliente { get; set; }
+        public required bool Fornecedor { get; set; }
 
     }
 }

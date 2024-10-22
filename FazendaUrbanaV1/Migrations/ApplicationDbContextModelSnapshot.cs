@@ -38,45 +38,6 @@ namespace FazendaUrbanaV1.Migrations
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("FazendaUrbanaV1.Models.Fazenda", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AreaX")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AreaY")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Fazendas");
-                });
-
-            modelBuilder.Entity("FazendaUrbanaV1.Models.FazendaLocais", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FazendaLocais");
-                });
-
             modelBuilder.Entity("FazendaUrbanaV1.Models.Funcao", b =>
                 {
                     b.Property<int>("Id")
@@ -137,10 +98,11 @@ namespace FazendaUrbanaV1.Migrations
                     b.Property<int>("IdSemente")
                         .HasColumnType("int");
 
-                    b.Property<int>("LocalFazenda")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("IdProduto");
+
+                    b.HasIndex("IdSemente");
 
                     b.ToTable("Producaos");
                 });
@@ -163,7 +125,7 @@ namespace FazendaUrbanaV1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Producao")
+                    b.Property<bool>("Producao")
                         .HasColumnType("bit");
 
                     b.Property<int?>("ProducaoEmSegundos")
@@ -172,7 +134,7 @@ namespace FazendaUrbanaV1.Migrations
                     b.Property<int?>("ValidadeEmSegundos")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Venda")
+                    b.Property<bool>("Venda")
                         .HasColumnType("bit");
 
                     b.Property<float?>("VlrCusto")
@@ -235,7 +197,14 @@ namespace FazendaUrbanaV1.Migrations
                     b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
+                    b.Property<int>("TipoVenda")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("IdParceiro");
+
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Vendas");
                 });
@@ -268,9 +237,30 @@ namespace FazendaUrbanaV1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdProduto");
+
                     b.HasIndex("VendaId");
 
                     b.ToTable("VendasIte");
+                });
+
+            modelBuilder.Entity("FazendaUrbanaV1.Models.Producao", b =>
+                {
+                    b.HasOne("FazendaUrbanaV1.Models.Produtos", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FazendaUrbanaV1.Models.Produtos", "Semente")
+                        .WithMany()
+                        .HasForeignKey("IdSemente")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+
+                    b.Navigation("Semente");
                 });
 
             modelBuilder.Entity("FazendaUrbanaV1.Models.Produtos", b =>
@@ -291,13 +281,40 @@ namespace FazendaUrbanaV1.Migrations
                     b.Navigation("Funcao");
                 });
 
+            modelBuilder.Entity("FazendaUrbanaV1.Models.Vendas", b =>
+                {
+                    b.HasOne("FazendaUrbanaV1.Models.Parceiros", "Parceiro")
+                        .WithMany()
+                        .HasForeignKey("IdParceiro")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FazendaUrbanaV1.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Parceiro");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("FazendaUrbanaV1.Models.VendasIte", b =>
                 {
+                    b.HasOne("FazendaUrbanaV1.Models.Produtos", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FazendaUrbanaV1.Models.Vendas", "Vendas")
                         .WithMany("vendasIte")
                         .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Produto");
 
                     b.Navigation("Vendas");
                 });

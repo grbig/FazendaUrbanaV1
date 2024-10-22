@@ -10,8 +10,8 @@
         public float? VlrVenda { get; set; }
         public float? VlrCusto { get; set; }
 
-        public Boolean? Producao {  get; set; }
-        public Boolean? Venda { get; set; }
+        public bool Producao {  get; set; }
+        public bool Venda { get; set; }
 
         public Categorias? Categoria { get; set; }
         public int? CategoriaId { get; set; }
